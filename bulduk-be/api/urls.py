@@ -24,6 +24,7 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     
     # Mevcut URLs
-    path('', include('api.apps.true_false.urls')),
-    path('', include('api.apps.authentication.urls')),
+    path('api/auth/', include('api.apps.authentication.urls')),
+    path('games/', include('api.apps.true_false.urls')),
+    path('auth/login/', login_view, name='login'),
 ] 

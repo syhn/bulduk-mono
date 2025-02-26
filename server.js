@@ -15,14 +15,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// API isteklerini https://buld.uk adresine yönlendir
-const targetUrl = "https://buld.uk";
+// API isteklerini backend'e yönlendir
+const targetUrl = "http://backend:8000";  // Docker Compose'daki backend servisine yönlendir
 console.log(`Proxy hedef URL'si: ${targetUrl}`);
 
 app.use('/api', createProxyMiddleware({
   target: targetUrl,
-  changeOrigin: true, // HTTPS için true
-  secure: true,
+  changeOrigin: true,
+  secure: false,
+  pathRewrite: {
+    '^/api': ''  // /api prefix'ini kaldır
+  },
   logLevel: 'debug',
   onProxyReq: (proxyReq, req, res) => {
     console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
