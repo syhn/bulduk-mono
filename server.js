@@ -15,20 +15,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// API isteklerini backend'e yönlendir
-const targetUrl = "http://backend:8000";  // Docker Compose'daki backend servisine yönlendir
+// Production ortamında https://buld.uk adresine yönlendir
+const targetUrl = "https://buld.uk";
 console.log(`Proxy hedef URL'si: ${targetUrl}`);
 
-app.use('/api', createProxyMiddleware({
+// Proxy middleware'i oluştur
+const apiProxy = createProxyMiddleware({
   target: targetUrl,
   changeOrigin: true,
-  secure: false,
-  pathRewrite: {
-    '^/api': ''  // /api prefix'ini kaldır
-  },
+  secure: true,  // HTTPS için true
+  // pathRewrite KULLANMAYIN - /api prefix'i korunmalı
   logLevel: 'debug',
   onProxyReq: (proxyReq, req, res) => {
-    console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
+    // Tam URL'yi logla
+    console.log(`Proxy istek: ${req.method} ${req.url} -> ${targetUrl}${req.url}`);
     
     // Content-Type header'ını ayarla
     if (!proxyReq.getHeader('Content-Type')) {
@@ -48,6 +48,8 @@ app.use('/api', createProxyMiddleware({
   onError: (err, req, res) => {
     console.error(`Proxy hatası: ${err.message}`);
     console.error(`Hata detayları: ${err.stack}`);
+    console.error(`İstek URL'si: ${req.method} ${req.url}`);
+    console.error(`Hedef URL: ${targetUrl}${req.url}`);
     
     // İstemciye anlamlı hata mesajı gönder
     res.status(500).json({ 
@@ -56,7 +58,10 @@ app.use('/api', createProxyMiddleware({
       details: `Hedef URL: ${targetUrl}${req.url}`
     });
   }
-}));
+});
+
+// Proxy middleware'i uygula
+app.use('/api', apiProxy);
 
 // Static dosyaları serve et
 app.use(express.static(path.join(__dirname, "build")));
