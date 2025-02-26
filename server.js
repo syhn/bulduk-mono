@@ -15,30 +15,24 @@ app.use((req, res, next) => {
   next();
 });
 
-// API isteklerini belirtilen hedeflere yönlendir
-// Tam URL formatını kullan (https:// veya http:// ile başlayan)
-const targetUrl = process.env.API_URL ? 
-  (process.env.API_URL.startsWith('http') ? process.env.API_URL : `http://${process.env.API_URL}`) : 
-  "http://backend:8000";
-
+// API isteklerini https://buld.uk adresine yönlendir
+const targetUrl = "https://buld.uk";
 console.log(`Proxy hedef URL'si: ${targetUrl}`);
 
 app.use('/api', createProxyMiddleware({
   target: targetUrl,
-  changeOrigin: true,
-  secure: false,
+  changeOrigin: true, // HTTPS için true
+  secure: true,
   logLevel: 'debug',
-  // pathRewrite kaldırıldı - bu sorun yaratıyor
   onProxyReq: (proxyReq, req, res) => {
-    // Tam URL'yi logla
-    console.log(`Proxy istek: ${req.method} ${req.url} -> ${targetUrl}${req.url}`);
+    console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
     
     // Content-Type header'ını ayarla
     if (!proxyReq.getHeader('Content-Type')) {
       proxyReq.setHeader('Content-Type', 'application/json');
     }
     
-    // Body'yi yeniden yazma - bu kısmı düzelttik
+    // Body'yi yeniden yazma
     if (req.body && Object.keys(req.body).length > 0) {
       const bodyData = JSON.stringify(req.body);
       proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
