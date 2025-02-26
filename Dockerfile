@@ -12,32 +12,39 @@ RUN npm run build
 
 # Serve frontend with Express + proxy
 RUN npm install express http-proxy-middleware
-RUN echo 'const express = require("express");\n\
-const path = require("path");\n\
-const { createProxyMiddleware } = require("http-proxy-middleware");\n\
-const app = express();\n\
-\n\
-// API isteklerini backend\'e yönlendir\n\
-app.use("/api", createProxyMiddleware({\n\
-  target: process.env.API_URL || "http://localhost:8000",\n\
-  changeOrigin: true\n\
-}));\n\
-\n\
-// Static dosyaları serve et\n\
-app.use(express.static(path.join(__dirname, "build")));\n\
-\n\
-// Diğer tüm istekleri React\'e yönlendir\n\
-app.get("*", (req, res) => {\n\
-  res.sendFile(path.join(__dirname, "build", "index.html"));\n\
-});\n\
-\n\
-const PORT = process.env.PORT || 8080;\n\
-app.listen(PORT, () => {\n\
-  console.log(`Server running on port ${PORT}`);\n\
-});' > server.js
+
+# Create server.js file with heredoc syntax
+RUN cat > server.js << 'EOL'
+const express = require("express");
+const path = require("path");
+const { createProxyMiddleware } = require("http-proxy-middleware");
+const app = express();
+
+// API isteklerini buld.uk backend'ine yönlendir
+app.use("/api", createProxyMiddleware({
+  target: process.env.API_URL || "https://buld.uk",
+  changeOrigin: true,
+  pathRewrite: {
+    '^/api': '/api'  // Path rewrite gerekirse kullanılabilir
+  }
+}));
+
+// Static dosyaları serve et
+app.use(express.static(path.join(__dirname, "build")));
+
+// Diğer tüm istekleri React'e yönlendir
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+EOL
 
 # Expose port
 EXPOSE 8080
 
 # Start command
-CMD ["node", "server.js"] 
+CMD ["node", "server.js"]
