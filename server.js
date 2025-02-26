@@ -3,12 +3,28 @@ const path = require("path");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
-// API isteklerini buld.uk backend'ine yönlendir
+// Debug için API isteklerini loglayalım
+app.use((req, res, next) => {
+  if (req.url.startsWith('/api')) {
+    console.log(`API İsteği: ${req.method} ${req.url}`);
+  }
+  next();
+});
+
+// API isteklerini buld.uk backend'ine yönlendir - rewrite yapmadan
 app.use("/api", createProxyMiddleware({
-  target: process.env.API_URL || "https://buld.uk",
+  target: "https://buld.uk",
   changeOrigin: true,
-  pathRewrite: {
-    '^/api': '/api'  // Path rewrite gerekirse kullanılabilir
+  secure: true,
+  logLevel: 'debug',
+  onProxyReq: (proxyReq, req, res) => {
+    console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
+  },
+  onProxyRes: (proxyRes, req, res) => {
+    console.log(`Proxy yanıt: ${proxyRes.statusCode} ${req.url}`);
+  },
+  onError: (err, req, res) => {
+    console.error(`Proxy hatası: ${err.message}`);
   }
 }));
 
@@ -23,4 +39,5 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`API proxy hedefi: https://buld.uk`);
 }); 
