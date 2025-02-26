@@ -1,10 +1,13 @@
 import { authService } from './authService';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://api.buld.uk';
+// Production'da /api prefix'ini kullan
+const API_BASE = process.env.NODE_ENV === 'development' 
+  ? (process.env.REACT_APP_API_URL || 'http://localhost:8000')
+  : '/api';
 
 const startSession = async () => {
   try {
-    const response = await makeRequest(`${API_URL}/games/true-false/session/start/`, {
+    const response = await makeRequest(`${API_BASE}/games/true-false/session/start/`, {
       method: 'POST'
     });
 
@@ -20,10 +23,12 @@ const startSession = async () => {
   }
 };
 
-const makeRequest = async (url, options = {}) => {
+const makeRequest = async (endpoint, options = {}) => {
   try {
     const token = authService.getToken();
-    const response = await fetch(url, {
+    const fullUrl = `${API_BASE}${endpoint}`;
+    
+    const response = await fetch(fullUrl, {
       ...options,
       headers: {
         ...options.headers,
@@ -37,7 +42,7 @@ const makeRequest = async (url, options = {}) => {
       try {
         await authService.login();
         const newToken = authService.getToken();
-        const retryResponse = await fetch(url, {
+        const retryResponse = await fetch(fullUrl, {
           ...options,
           headers: {
             ...options.headers,

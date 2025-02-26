@@ -48,7 +48,7 @@ function TrueFalseGamePlay({ theme }) {
     try {
       setIsLoading(true);
       const response = await apiService.makeRequest(
-        `https://api.buld.uk/games/true-false/question/?session_id=${sid}`,
+        `/games/true-false/question/?session_id=${sid}`,
         {
           method: 'GET'
         }
@@ -89,7 +89,7 @@ function TrueFalseGamePlay({ theme }) {
         requestBody.category = category;
       }
 
-      const response = await apiService.makeRequest('https://api.buld.uk/games/true-false/session/start/', {
+      const response = await apiService.makeRequest('/games/true-false/session/start/', {
         method: 'POST',
         body: JSON.stringify(requestBody)
       });
@@ -108,7 +108,7 @@ function TrueFalseGamePlay({ theme }) {
   // Cevap kontrolü fonksiyonu
   const checkAnswer = useCallback(async (answer) => {
     try {
-      const response = await apiService.makeRequest('https://api.buld.uk/games/true-false/check/', {
+      const response = await apiService.makeRequest('/games/true-false/check/', {
         method: 'POST',
         body: JSON.stringify({
           unique_id: currentQuestion?.id,
@@ -251,7 +251,7 @@ function TrueFalseGamePlay({ theme }) {
     if (!sessionId) return;
     
     try {
-      await apiService.makeRequest('https://api.buld.uk/games/true-false/session/end/', {
+      await apiService.makeRequest('/games/true-false/session/end/', {
         method: 'POST',
         body: JSON.stringify({
           session_id: sessionId

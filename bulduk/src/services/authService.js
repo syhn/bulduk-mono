@@ -26,12 +26,14 @@ const isAuthenticated = () => {
   return !!getToken();
 };
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://api.buld.uk';
+const API_BASE = process.env.NODE_ENV === 'development' 
+  ? (process.env.REACT_APP_API_URL || 'http://localhost:8000')
+  : '/api';
 
 const login = async () => {
   try {
     console.log('Login isteği başlatılıyor...');
-    const response = await fetch(`${API_URL}/auth/login/`, {
+    const response = await fetch(`${API_BASE}/auth/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
