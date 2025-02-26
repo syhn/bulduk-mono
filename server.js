@@ -15,20 +15,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// Production ortamında https://buld.uk adresine yönlendir
-const targetUrl = "https://buld.uk";
+// API isteklerini doğrudan backend'e yönlendir
+const targetUrl = "http://backend:8000";  // Docker Compose'daki backend servisine yönlendir
 console.log(`Proxy hedef URL'si: ${targetUrl}`);
 
 // Proxy middleware'i oluştur
 const apiProxy = createProxyMiddleware({
   target: targetUrl,
   changeOrigin: true,
-  secure: true,  // HTTPS için true
-  // pathRewrite KULLANMAYIN - /api prefix'i korunmalı
+  secure: false,
+  pathRewrite: {
+    '^/api': ''  // /api prefix'ini kaldır
+  },
   logLevel: 'debug',
   onProxyReq: (proxyReq, req, res) => {
-    // Tam URL'yi logla
-    console.log(`Proxy istek: ${req.method} ${req.url} -> ${targetUrl}${req.url}`);
+    console.log(`Proxy istek: ${req.method} ${req.url} -> ${targetUrl}${proxyReq.path}`);
     
     // Content-Type header'ını ayarla
     if (!proxyReq.getHeader('Content-Type')) {
@@ -48,14 +49,12 @@ const apiProxy = createProxyMiddleware({
   onError: (err, req, res) => {
     console.error(`Proxy hatası: ${err.message}`);
     console.error(`Hata detayları: ${err.stack}`);
-    console.error(`İstek URL'si: ${req.method} ${req.url}`);
-    console.error(`Hedef URL: ${targetUrl}${req.url}`);
     
     // İstemciye anlamlı hata mesajı gönder
     res.status(500).json({ 
       error: "API sunucusuna bağlanılamadı",
       message: err.message,
-      details: `Hedef URL: ${targetUrl}${req.url}`
+      details: `Hedef URL: ${targetUrl}${req.url.replace(/^\/api/, '')}`
     });
   }
 });

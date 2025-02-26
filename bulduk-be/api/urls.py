@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from api.apps.authentication.views import login_view  # login_view'ı import edin
 
 # Swagger şema görünümü
 schema_view = get_schema_view(
@@ -23,8 +24,8 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     
-    # Mevcut URLs
-    path('api/auth/', include('api.apps.authentication.urls')),
+    # Mevcut URLs - /api prefix'i olmadan tanımlayın
+    path('auth/', include('api.apps.authentication.urls')),
     path('games/', include('api.apps.true_false.urls')),
     path('auth/login/', login_view, name='login'),
 ] 
