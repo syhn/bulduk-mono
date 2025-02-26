@@ -17,9 +17,6 @@ app.use('/api', createProxyMiddleware({
   changeOrigin: true,
   secure: true,
   logLevel: 'debug',
-  pathRewrite: {
-    '^/api': '/api' // Path rewrite'ı koruyalım
-  },
   onProxyReq: (proxyReq, req, res) => {
     console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
   },
@@ -28,6 +25,10 @@ app.use('/api', createProxyMiddleware({
   },
   onError: (err, req, res) => {
     console.error(`Proxy hatası: ${err.message}`);
+    res.status(500).json({ 
+      error: "Proxy hatası", 
+      message: err.message 
+    });
   }
 }));
 
