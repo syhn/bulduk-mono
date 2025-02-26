@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']  # Güvenlik için daha sonra sınırlandırılabilir
+ALLOWED_HOSTS = ['buld.uk', 'api.buld.uk', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.auth',  # admin ve sessions'a gerek yok
@@ -110,14 +110,13 @@ SWAGGER_SETTINGS = {
 }
 
 # CORS ayarları
-CORS_ALLOW_ALL_ORIGINS = True  # Geliştirme için tüm originlere izin ver
+CORS_ALLOWED_ORIGINS = [
+    "https://buld.uk",
+    "http://localhost:3000"  # Geliştirme için
+]
 
-# Veya belirli originlere izin vermek için:
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-#     "https://your-frontend-domain.com",
-# ]
+# veya tüm originlere izin ver
+CORS_ALLOW_ALL_ORIGINS = True
 
 # İhtiyaca göre ek CORS ayarları
 CORS_ALLOW_METHODS = [

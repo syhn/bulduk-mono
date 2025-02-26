@@ -1,8 +1,10 @@
 import { authService } from './authService';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://api.buld.uk';
+
 const startSession = async () => {
   try {
-    const response = await makeRequest('https://api.buld.uk/games/true-false/session/start/', {
+    const response = await makeRequest(`${API_URL}/games/true-false/session/start/`, {
       method: 'POST'
     });
 
