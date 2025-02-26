@@ -3,6 +3,10 @@ const path = require("path");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
+// JSON body parser'ı en başta ekleyelim
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Debug için API isteklerini loglayalım
 app.use((req, res, next) => {
   if (req.url.startsWith('/api')) {
@@ -12,26 +16,29 @@ app.use((req, res, next) => {
 });
 
 // API isteklerini belirtilen hedeflere yönlendir
-const targetUrl = process.env.API_URL ? process.env.API_URL : "http://backend:8000";
+// Tam URL formatını kullan (https:// veya http:// ile başlayan)
+const targetUrl = process.env.API_URL ? 
+  (process.env.API_URL.startsWith('http') ? process.env.API_URL : `http://${process.env.API_URL}`) : 
+  "http://backend:8000";
+
 console.log(`Proxy hedef URL'si: ${targetUrl}`);
 
 app.use('/api', createProxyMiddleware({
   target: targetUrl,
   changeOrigin: true,
-  secure: false, // Self-signed sertifikalar için
+  secure: false,
   logLevel: 'debug',
-  pathRewrite: {
-    '^/api': '/api' // Path'i koru
-  },
+  // pathRewrite kaldırıldı - bu sorun yaratıyor
   onProxyReq: (proxyReq, req, res) => {
-    console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
+    // Tam URL'yi logla
+    console.log(`Proxy istek: ${req.method} ${req.url} -> ${targetUrl}${req.url}`);
     
-    // Content-Type header'ını ayarla (gerekirse)
-    if (!proxyReq.getHeader('Content-Type') && req.body) {
+    // Content-Type header'ını ayarla
+    if (!proxyReq.getHeader('Content-Type')) {
       proxyReq.setHeader('Content-Type', 'application/json');
     }
     
-    // Body'yi string olarak ayarla (gerekirse)
+    // Body'yi yeniden yazma - bu kısmı düzelttik
     if (req.body && Object.keys(req.body).length > 0) {
       const bodyData = JSON.stringify(req.body);
       proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
@@ -43,19 +50,16 @@ app.use('/api', createProxyMiddleware({
   },
   onError: (err, req, res) => {
     console.error(`Proxy hatası: ${err.message}`);
-    console.error(`Hata detayları: ${JSON.stringify(err)}`);
+    console.error(`Hata detayları: ${err.stack}`);
     
     // İstemciye anlamlı hata mesajı gönder
     res.status(500).json({ 
       error: "API sunucusuna bağlanılamadı",
       message: err.message,
-      details: "Lütfen backend servisinin çalıştığından emin olun"
+      details: `Hedef URL: ${targetUrl}${req.url}`
     });
   }
 }));
-
-// JSON body parser ekleyelim
-app.use(express.json());
 
 // Static dosyaları serve et
 app.use(express.static(path.join(__dirname, "build")));
