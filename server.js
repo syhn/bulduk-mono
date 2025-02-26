@@ -11,12 +11,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// API isteklerini buld.uk backend'ine yönlendir - rewrite yapmadan
-app.use("/api", createProxyMiddleware({
-  target: "https://buld.uk",
+// API isteklerini doğru backend'e yönlendir
+app.use('/api', createProxyMiddleware({
+  target: process.env.API_URL || "http://backend:8000", // Docker Compose'daki backend service'ine
   changeOrigin: true,
   secure: true,
   logLevel: 'debug',
+  pathRewrite: {
+    '^/api': '/api' // Path rewrite'ı koruyalım
+  },
   onProxyReq: (proxyReq, req, res) => {
     console.log(`Proxy istek: ${req.method} ${req.url} -> ${proxyReq.path}`);
   },
@@ -39,5 +42,5 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`API proxy hedefi: https://buld.uk`);
+  console.log(`API proxy hedefi: ${process.env.API_URL || "http://backend:8000"}`);
 }); 

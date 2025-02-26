@@ -2,6 +2,9 @@
 FROM node:18-slim
 WORKDIR /app
 
+# Add curl for testing
+RUN apt-get update && apt-get install -y curl && apt-get clean
+
 # Copy frontend files
 COPY bulduk/package*.json ./
 RUN npm install
