@@ -1,17 +1,5 @@
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "8080:8080"
-    environment:
-      - NODE_ENV=production
-      - REACT_APP_API_URL=http://backend:8000
-
-  backend:
-    build: ./bulduk-be
-    ports:
-      - "8000:8000"
-
+  # Ana uygulama - Express + React (frontend)
   app:
     build: .
     ports:
@@ -20,4 +8,18 @@ services:
       - NODE_ENV=production
       - API_URL=http://backend:8000
     depends_on:
-      - backend 
+      - backend
+    networks:
+      - app-network
+      
+  # Backend servisi
+  backend:
+    build: ./bulduk-be
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge 
