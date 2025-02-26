@@ -1,0 +1,22 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Cache bağımlılıkları
+RUN apk add --no-cache libc6-compat
+
+# npm cache'i etkinleştir
+RUN npm config set cache /tmp/npm-cache --global
+
+COPY package*.json ./
+RUN npm install --prefer-offline --no-audit
+
+COPY . .
+
+# Development için environment variable
+ENV NODE_ENV=development
+ENV NODE_OPTIONS="--max-old-space-size=256"
+
+EXPOSE 3000
+
+CMD ["npm", "start"] 

@@ -1,0 +1,487 @@
+/* Mevcut stillerin en üstüne ekleyin */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Eğer bazı özel alanlarda (örn: input) seçilebilir olmasını istiyorsanız */
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* Yeşil renk değişkeni tanımlayalım */
+:root {
+  --primary-green: #22c55e;
+  --primary-green-hover: #83a08e;
+}
+
+.App {
+  text-align: center;
+  padding-top: 120px; /* Header yüksekliği + extra padding */
+  min-height: 100vh;
+  position: relative;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.games-container {
+  display: flex;
+  gap: 40px;
+  padding: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.game-card {
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px;
+  padding: 30px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+  transition: all 0.6s ease;
+  border-radius: 20px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.game-card .game-icon text {
+  font-size: 45px;
+  font-weight: bold;
+}
+
+/* Mevcut .game-icon stillerinin altına ekleyin */
+.game-icon text {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: bold;
+}
+
+.game-icon .icon-content {
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-icon .icon-content {
+  transform: none;
+}
+
+/* Koyu tema stilleri */
+.App.dark {
+  background: linear-gradient(135deg, #1a2b6d 0%, #162454 100%);
+}
+
+.App.dark .game-card {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.App.dark .game-icon {
+  color: var(--primary-green);
+}
+
+.App.dark h2 {
+  color: white;
+}
+
+.App.dark p {
+  color: #b0b0b0;
+}
+
+/* Açık tema stilleri */
+.App.light {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.App.light .game-card {
+  background: white;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.App.light .game-card:first-child .game-icon,
+.App.light .game-card:last-child .game-icon {
+  color: var(--primary-green);
+}
+
+.App.light h2 {
+  color: #1e293b;
+}
+
+.App.light p {
+  color: #64748b;
+}
+
+/* Hover efektleri */
+.game-card:hover {
+  transform: translateY(-10px);
+}
+
+.game-card:hover .game-icon {
+  transform: rotate(360deg);
+  color: var(--primary-green-hover);
+}
+
+.App.light .game-card:hover {
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.hover-circle, .hover-rect {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-card:hover .hover-circle,
+.game-card:hover .hover-rect {
+  opacity: 1;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
+
+/* Header'ı sabitlemek için */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(26, 43, 109, 0.95); /* Koyu tema için */
+  backdrop-filter: blur(8px);
+}
+
+/* Açık tema için header background */
+.app-header.light {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* main-content padding'ini kaldıralım çünkü App'te var artık */
+.main-content {
+  min-height: calc(100vh - 120px); /* viewport height - header height */
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+  .App {
+    padding-top: 140px;
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 140px);
+  }
+
+  .games-container {
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .game-card {
+    min-width: 250px;
+    padding: 20px;
+  }
+
+  .game-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .game-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .game-card p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    padding-top: 160px;
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 160px);
+  }
+
+  .games-container {
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .game-card {
+    min-width: 200px;
+    padding: 15px;
+  }
+
+  .game-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .game-card .game-icon text {
+    font-size: 35px;
+  }
+
+  .game-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .game-card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* İçerik dönmesin, sadece ikon dönsün */
+.game-card h2,
+.game-card p {
+  transition: all 0.3s ease;
+}
+
+/* Geçiş animasyonları için container */
+.routes-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Geçiş animasyonları */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100%);
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  transition: all 200ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0%);
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  transition: all 200ms ease-in;
+}
+
+/* Her route için kapsayıcı */
+.route-wrapper {
+  position: absolute;
+  width: 100%;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+/* Kartlar için hover ipucu */
+.game-card::after {
+  content: "Oynamak için tıkla";
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: var(--primary-green);
+  font-size: 0.9rem;
+}
+
+.game-card:hover::after {
+  opacity: 1;
+}
+
+/* Hover glow efekti */
+.game-card:hover {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+/* Focus stilleri */
+.game-card:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+}
+
+/* Buton ripple efekti */
+.start-button,
+.rules-button,
+.back-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.start-button::after,
+.rules-button::after,
+.back-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.start-button:active::after,
+.rules-button:active::after,
+.back-button:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* Geçiş animasyonlarını hızlandıralım */
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 200ms ease-in, filter 200ms ease-in;
+}
+
+/* Başlık ve metin animasyonları için yeni stiller */
+.game-card h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  background: linear-gradient(45deg, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.game-card:hover h2 {
+  transform: scale(1.05);
+  background: linear-gradient(45deg, #16a34a, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-card p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.9;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.game-card:hover p {
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+/* Oyun kartları için yeni hover efekti */
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+  transform: translateY(100%);
+  transition: transform 0.5s ease;
+  z-index: 0;
+  border-radius: 24px;
+}
+
+.game-card:hover::before {
+  transform: translateY(0);
+}
+
+/* Disabled oyun kartı için stiller */
+.game-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.game-card.disabled::after {
+  content: none;
+}
+
+.coming-soon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 2;
+  transform: rotate(15deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Koyu tema için */
+.App.dark .game-card.disabled {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Açık tema için */
+.App.light .game-card.disabled {
+  background: rgba(0, 0, 0, 0.02);
+} 

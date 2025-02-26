@@ -1,0 +1,7 @@
+django
+djangorestframework
+drf-yasg
+django-cors-headers
+djangorestframework-simplejwt
+pymongo
+django-ipware 

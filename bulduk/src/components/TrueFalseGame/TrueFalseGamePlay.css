@@ -1,0 +1,1338 @@
+.game-play-container {
+  min-height: 100vh;
+  padding: 1rem;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0;
+  padding: 0 0.5rem;
+  gap: 1rem;
+}
+
+.game-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Score ve timer'ı içeren container */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.score, .timer {
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  background: var(--primary-green);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Koyu tema için */
+.game-play-container.dark .score,
+.game-play-container.dark .timer {
+  background: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+  color: white;
+}
+
+/* Açık tema için */
+.game-play-container.light .score,
+.game-play-container.light .timer {
+  background: var(--primary-green);
+  color: white;
+}
+
+/* Süre azaldıkça kırmızıya dönsün */
+.timer.warning {
+  background: #f59e0b !important; /* 3 saniyeden az */
+}
+
+.timer.danger {
+  background: #ef4444 !important; /* 1 saniyeden az */
+}
+
+/* Soru container stilleri */
+.question-container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  margin: 2rem auto;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.question-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.category-info {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
+}
+
+.category-icon {
+  font-size: 1.2rem;
+  margin-right: 0.2rem;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+.category-info .separator {
+  margin: 0 0.5rem;
+  opacity: 0.5;
+}
+
+.difficulty-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.difficulty-easy .difficulty-badge {
+  background: #22c55e;
+}
+
+.difficulty-normal .difficulty-badge {
+  background: #3b82f6;
+}
+
+.difficulty-hard .difficulty-badge {
+  background: #f59e0b;
+}
+
+.difficulty-very-hard .difficulty-badge {
+  background: #ef4444;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: white;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* Açık tema için */
+.game-play-container.light .question-text {
+  color: #1e293b;
+}
+
+.game-play-container.light .category-info {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.game-play-container.light .category-icon {
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+}
+
+/* Buton container stilleri */
+.buttons-container {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Buton stilleri */
+.answer-button, .skip-button {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.answer-button svg, .skip-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Sabit renkli butonlar */
+.true-button {
+  background: #22c55e !important; /* Sabit yeşil */
+}
+
+.false-button {
+  background: #dc2626 !important; /* Sabit kırmızı */
+}
+
+.skip-button {
+  background: #7164a1 !important; /* Sabit mor */
+}
+
+/* Disabled durumları */
+.answer-button:disabled,
+.skip-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.skip-button svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+/* Seçildiğinde veya cevap gösterildiğinde */
+.answer-button.selected {
+  background: #3b82f6;
+  transform: scale(0.98);
+}
+
+.answer-button.correct {
+  background: var(--primary-green) !important;
+  animation: pulse 0.5s;
+}
+
+.answer-button.wrong {
+  background: var(--danger-red) !important;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.explanation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.quit-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quit-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mevcut stillere ek olarak */
+
+.loading {
+  font-size: 1.5rem;
+  color: white;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Oyun sonu istatistikleri için modern stiller */
+.game-over {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 32px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.game-over h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: white;
+  font-weight: 700;
+}
+
+.final-score {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.play-again {
+  background: #22c55e;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-again:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+/* Açık tema için */
+.game-play-container.light .game-over {
+  background: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.game-play-container.light .game-over h2 {
+  color: #1e293b;
+}
+
+.game-play-container.light .final-score {
+  color: #1e293b;
+}
+
+/* Mevcut stillerin üzerine ekleyin */
+
+.start-popup {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 3rem;
+  border-radius: 24px;
+  text-align: center;
+  animation: popIn 0.5s ease-out;
+}
+
+.start-popup h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.start-popup p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.countdown {
+  font-size: 5rem;
+  font-weight: bold;
+  color: var(--primary-green);
+  animation: pulse 1s infinite;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Açık tema için */
+.game-play-container.light .start-popup {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.game-play-container.light .start-popup h2 {
+  color: #1e293b;
+}
+
+.game-play-container.light .start-popup p {
+  color: #64748b;
+}
+
+/* Koyu tema için question container */
+.game-play-container.dark .question-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.game-play-container.dark .question-container h2 {
+  color: white;
+}
+
+/* Açık tema için question container */
+.game-play-container.light .question-container {
+  background: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.game-play-container.light .question-container h2 {
+  color: #1e293b;
+}
+
+/* Açık tema için explanation */
+.game-play-container.light .explanation {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+/* Açık tema için quit button */
+.game-play-container.light .quit-button {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.game-play-container.light .quit-button:hover {
+  background: #e2e8f0;
+}
+
+/* Cevap popup'ı için stiller */
+.answer-popup {
+  margin: 1rem auto;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.answer-popup.correct {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 2px solid #22c55e;
+}
+
+.answer-popup.wrong {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 2px solid #ef4444;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Açık tema için popup stilleri */
+.game-play-container.light .answer-popup.correct {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.game-play-container.light .answer-popup.wrong {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Mevcut popup stillerine ek olarak */
+.answer-popup.timeout {
+  background: rgba(234, 179, 8, 0.2);
+  color: #eab308;
+  border: 2px solid #eab308;
+}
+
+/* Açık tema için */
+.game-play-container.light .answer-popup.timeout {
+  background: rgba(234, 179, 8, 0.1);
+}
+
+/* Mobil için mevcut media query'leri güncelleyelim */
+@media (max-width: 768px) {
+  .game-play-container {
+    padding-top: 60px;
+    justify-content: flex-start;
+  }
+
+  .game-header {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .score, .timer {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    min-width: 120px;
+  }
+
+  .game-stats {
+    gap: 0.8rem;
+  }
+
+  .hearts::after {
+    font-size: 1.3rem;
+  }
+
+  .heart {
+    font-size: 1.5rem;
+  }
+
+  .skip {
+    width: 30px;
+    height: 30px;
+  }
+
+  .skip svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .question-container {
+    padding: 1.5rem;
+    width: 80%;
+  }
+
+  .question-container h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .buttons-container {
+    gap: 0.5rem;
+  }
+
+  .answer-button, .skip-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .answer-button svg, .skip-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Oyundan çık butonu için düzenleme */
+  .quit-button {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-play-container {
+    padding: 0;
+  }
+
+  .game-header {
+    padding: 0;
+  }
+
+  .heart {
+    font-size: 1.3rem;
+  }
+
+  .skip {
+    width: 25px;
+    height: 25px;
+  }
+
+  .skip svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .answer-popup {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .explanation {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .answer-button, .skip-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .answer-button svg, .skip-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .question-container {
+    padding: 1.5rem;
+    width: 80%;
+  }
+
+  .game-stats {
+    gap: 0.6rem;
+  }
+
+  .hearts::after {
+    font-size: 1.2rem;
+  }
+}
+
+/* Ekran yüksekliği az olan cihazlar için */
+@media (max-height: 600px) {
+  .game-play-container {
+    padding-top: 40px;
+  }
+
+  .game-header {
+    margin-bottom: 0.3rem;
+  }
+
+  .question-container {
+    margin-bottom: 3rem; /* Quit button için alan */
+  }
+}
+
+/* Game Over ekranı için yeni stiller */
+.wrong-answers {
+  font-size: 1.3rem;
+  color: #ef4444;
+  margin-bottom: 2rem;
+}
+
+.game-over-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.go-home {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.go-home:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Açık tema için */
+.game-play-container.light .go-home {
+  background: rgba(0, 0, 0, 0.1);
+  color: #1e293b;
+}
+
+.game-play-container.light .go-home:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Kalan haklar için stiller */
+.lives {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lives-count {
+  color: #fde047;
+  font-size: 1.8rem;
+}
+
+.hearts {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.heart {
+  font-size: 2rem;
+  animation: floatHeart 2s ease-in-out infinite;
+  position: relative;
+  transform-origin: center;
+}
+
+/* Normal kalp animasyonu */
+@keyframes floatHeart {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Kalp patlama animasyonu */
+@keyframes explodeHeart {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* Yanlış cevap verildiğinde son kalbe patlama animasyonu ekle */
+.hearts.wrong .heart:last-child {
+  animation: explodeHeart 0.5s ease-out forwards;
+}
+
+/* Mobil için güncellemeler */
+@media (max-width: 768px) {
+  .hearts {
+    min-width: 150px;
+    padding: 0.75rem;
+  }
+
+  .heart {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hearts {
+    min-width: 120px;
+    padding: 0.5rem;
+  }
+
+  .heart {
+    font-size: 1.5rem;
+  }
+}
+
+/* Pas geçme butonları için stiller */
+.game-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.hearts::after {
+  display: none;
+}
+
+.skips {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.skip {
+  font-size: 2rem;
+  animation: floatSkip 2s ease-in-out infinite;
+  color: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.skip svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.3));
+}
+
+@keyframes floatSkip {
+  0%, 100% { 
+    transform: translateY(0) scale(1); 
+    filter: brightness(1);
+  }
+  50% { 
+    transform: translateY(-3px) scale(1.1);
+    filter: brightness(1.2);
+  }
+}
+
+/* Koyu tema için */
+.game-play-container.dark .skip {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Açık tema için */
+.game-play-container.light .skip {
+  color: rgba(99, 102, 241, 0.8);
+}
+
+.skip-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--primary-blue); /* Pas butonu mavi olsun */
+  color: white;
+}
+
+.skip-button:hover:not(.disabled) {
+  background: #2563eb; /* Mavi hover */
+  transform: translateY(-2px);
+}
+
+.skip-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #94a3b8;
+}
+
+/* Pas geçildi popup'ı için stil */
+.answer-popup.skipped {
+  background: rgba(99, 102, 241, 0.2);
+  color: #6366f1;
+  border: 2px solid #6366f1;
+}
+
+/* Açık tema için */
+.game-play-container.light .answer-popup.skipped {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 768px) {
+  .skip {
+    font-size: 1.8rem;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .skip-button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skip {
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.session-stats {
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.final-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-green);
+  margin-bottom: 1rem;
+}
+
+.stats-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item span:first-child {
+  font-weight: normal;
+}
+
+.stat-item span:last-child {
+  font-weight: bold;
+}
+
+/* Koyu tema için */
+.game-play-container.dark .stat-item span:last-child {
+  color: white;
+}
+
+/* Açık tema için */
+.game-play-container.light .stat-item span:last-child {
+  color: #1e293b;
+}
+
+/* Başarı oranı için özel stil */
+.stat-item.accuracy span:first-child {
+  font-weight: normal;
+}
+
+.stat-item.accuracy span:last-child {
+  font-weight: bold;
+}
+
+.game-play-container.light .session-stats {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.game-play-container.light .final-score,
+.game-play-container.light .stat-item.accuracy {
+  color: #1e293b;
+  font-weight: bold;
+}
+
+.game-play-container.light .stat-item {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .session-stats {
+    padding: 1rem;
+  }
+
+  .final-score {
+    font-size: 1.3rem;
+  }
+
+  .stat-item {
+    font-size: 0.9rem;
+  }
+}
+
+/* Koyu tema için */
+.game-play-container.dark .session-stats {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.game-play-container.dark .final-score,
+.game-play-container.dark .stat-item.accuracy {
+  color: white;
+  font-weight: bold;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.2rem;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+}
+
+.stat-item span:first-child {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.stat-item span:last-child {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* Başarı oranı için özel stil */
+.stat-item.accuracy {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 24px;
+}
+
+/* Mobil için düzenleme */
+@media (max-width: 480px) {
+  .stats-grid {
+    gap: 0.8rem;
+  }
+
+  .stats-column {
+    gap: 0.8rem;
+  }
+
+  .stat-item {
+    padding: 1rem;
+  }
+
+  .stat-item span:first-child {
+    font-size: 0.8rem;
+  }
+
+  .stat-item span:last-child {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .answer-button, .skip-button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .answer-button svg, .skip-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Kategori rozeti için temel stiller */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Kategori metni */
+.category-text {
+  font-weight: 700;
+}
+
+/* Ayraç */
+.category-separator {
+  margin: 0 0.3rem;
+  opacity: 0.8;
+}
+
+/* Alt kategori */
+.subcategory {
+  font-weight: 700;
+}
+
+/* Zorluk seviyesi renkleri */
+.difficulty {
+  font-weight: 700;
+}
+
+/* Koyu tema için zorluk seviyeleri */
+.game-play-container.dark .difficulty-easy {
+  color: #4ade80; /* Yeşil */
+}
+
+.game-play-container.dark .difficulty-normal {
+  color: #60a5fa; /* Mavi */
+}
+
+.game-play-container.dark .difficulty-hard {
+  color: #fb923c; /* Turuncu */
+}
+
+.game-play-container.dark .difficulty-very-hard {
+  color: #f87171; /* Kırmızı */
+}
+
+/* Açık tema için zorluk seviyeleri */
+.game-play-container.light .difficulty-easy {
+  color: #22c55e; /* Koyu Yeşil */
+}
+
+.game-play-container.light .difficulty-normal {
+  color: #3b82f6; /* Koyu Mavi */
+}
+
+.game-play-container.light .difficulty-hard {
+  color: #f97316; /* Koyu Turuncu */
+}
+
+.game-play-container.light .difficulty-very-hard {
+  color: #ef4444; /* Koyu Kırmızı */
+}
+
+/* Koyu tema için */
+.game-play-container.dark .category-badge {
+  color: rgba(255, 255, 255, 0.95);
+  background: none;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Açık tema için */
+.game-play-container.light .category-badge {
+  color: #1e293b;
+  background: none;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 768px) {
+  .category-badge {
+    padding: 0;
+    font-size: 0.85rem;
+    max-width: 90%;
+  }
+}
+
+/* Kalp ve skip stilleri için ekle */
+.heart.lost {
+  opacity: 0.3;
+  filter: grayscale(1);
+  animation: none; /* Kaybedilen kalplerde animasyon olmasın */
+}
+
+.skip.lost {
+  opacity: 0.3;
+  filter: grayscale(1);
+  animation: none; /* Kaybedilen skip'lerde animasyon olmasın */
+}
+
+/* Kalp patlama animasyonunu kaldır */
+.hearts.wrong .heart:last-child {
+  animation: none; /* Patlama animasyonunu kaldır */
+}
+
+.category-separator {
+  margin: 0 0.3rem;
+  opacity: 0.7;
+}
+
+.subcategory {
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 768px) {
+  .category-badge {
+    max-width: 90%;
+  }
+  
+  .category-separator {
+    margin: 0 0.2rem;
+  }
+}
+
+.difficulty {
+  opacity: 0.8;
+  font-style: bold;
+  color: var(--primary-green);
+}
+
+
+/* Koyu tema için */
+.game-play-container.dark .difficulty {
+  opacity: 1;
+}
+
+
+/* Açık tema için */
+.game-play-container.light .difficulty {
+  opacity: 0.9;
+}
+
+/* Koyu tema için arka plan ve kontrast iyileştirmeleri */
+.game-play-container.dark {
+  background: linear-gradient(135deg, #1a2b6d 0%, #162454 100%);
+}
+
+/* Skor ve timer için koyu temada daha belirgin görünüm */
+.game-play-container.dark .score,
+.game-play-container.dark .timer {
+  background: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+  color: white;
+}
+
+/* Soru container'ı için koyu temada daha iyi görünüm */
+.game-play-container.dark .question-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Kategori rozeti için koyu temada daha iyi görünüm */
+.game-play-container.dark .category-badge {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 900;
+  font-style: bold;
+}
+
+.game-play-container.dark .category-separator {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.game-play-container.dark .subcategory {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+
+/* Butonlar için koyu temada daha belirgin görünüm */
+.game-play-container.dark .answer-button,
+.game-play-container.dark .skip-button {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Kalp ve skip ikonları için koyu temada daha belirgin görünüm */
+.game-play-container.dark .heart,
+.game-play-container.dark .skip {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.game-play-container.dark .heart.lost,
+.game-play-container.dark .skip.lost {
+  opacity: 0.2;
+  filter: grayscale(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Zorluk seviyeleri için stiller */
+.question-container.difficulty-easy {
+  border-left: 4px solid #22c55e;
+}
+
+.question-container.difficulty-normal {
+  border-left: 4px solid #3b82f6;
+}
+
+.question-container.difficulty-hard {
+  border-left: 4px solid #f59e0b;
+}
+
+.question-container.difficulty-very-hard {
+  border-left: 4px solid #ef4444;
+}
+
+/* Zorluk badge'leri için renkler */
+.difficulty-easy .difficulty-badge {
+  background: #22c55e;
+}
+
+.difficulty-normal .difficulty-badge {
+  background: #3b82f6;
+}
+
+.difficulty-hard .difficulty-badge {
+  background: #f59e0b;
+}
+
+.difficulty-very-hard .difficulty-badge {
+  background: #ef4444;
+}
+
+/* Category info içindeki elementlerin hizalaması */
+.category-info {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
+}
+
+.category-icon,
+.category,
+.subcategory,
+.separator,
+.difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+}
+
+.category-info .separator {
+  margin: 0 0.5rem;
+  opacity: 0.5;
+} 

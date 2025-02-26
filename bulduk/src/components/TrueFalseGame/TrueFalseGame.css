@@ -1,0 +1,803 @@
+.game-page {
+  min-height: 100vh;
+  padding: 0; /* padding-top'ı kaldırdık */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 95%; /* 90%'dan 95%'e çıkardık */
+  max-width: 1200px; /* 1000px'den 1200px'e çıkardık */
+  margin: 0 auto;
+}
+
+/* Koyu tema */
+.game-page.dark {
+  background: linear-gradient(135deg, #1a2b6d 0%, #162454 100%);
+}
+
+.game-page.dark .game-content {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.game-page.dark h1,
+.game-page.dark h2 {
+  color: white;
+}
+
+.game-page.dark p,
+.game-page.dark li {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.game-page.dark .back-button,
+.game-page.dark .rules-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.game-page.dark .check-x-circle,
+.game-page.dark .check-square {
+  background: #22c55e;
+}
+
+/* Açık tema */
+.game-page.light {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.game-page.light .game-content {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon rengini yeşil yapalım */
+.game-page.light .game-icon {
+  color: #22c55e;
+}
+
+.game-page.light h1,
+.game-page.light h2 {
+  color: #1e293b;
+}
+
+.game-page.light p,
+.game-page.light li {
+  color: #64748b;
+}
+
+.game-page.light .back-button,
+.game-page.light .rules-button {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.game-page.light .check-x-circle,
+.game-page.light .check-square {
+  background: #22c55e;
+}
+
+/* Ortak stiller */
+.game-content {
+  max-width: 1200px;
+  width: 100%;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  background: transparent; /* Arka planı şeffaf yap */
+}
+
+.rules-button {
+  padding: 0.75rem;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.start-button {
+  background: #22c55e;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  max-width: 300px;
+  animation: pulse 2s infinite;
+}
+
+.start-button:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.rules-button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Game header stilleri */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  height: 60px;
+  position: relative;
+}
+
+.game-logo {
+  display: flex;
+  align-items: center;
+}
+
+.game-logo .game-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  height: 60px;
+}
+
+.game-title h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.game-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.game-info h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.game-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.game-info li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+  transform: translateX(-20px);
+  opacity: 0;
+  animation: slideRight 0.4s ease-out forwards;
+}
+
+.game-info li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #22c55e;
+}
+
+.game-info li:nth-child(1) { animation-delay: 0.1s; }
+.game-info li:nth-child(2) { animation-delay: 0.2s; }
+.game-info li:nth-child(3) { animation-delay: 0.3s; }
+
+.game-options {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+.options-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Her öğe için eşit genişlik */
+.option-item {
+  width: 200px; /* Sabit genişlik */
+}
+
+.option-select {
+  width: 100%;
+  height: 70px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--button-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.option-select .option-label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  font-weight: 700;
+  margin-bottom: 2px;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  display: block;
+}
+
+.option-select .option-value {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
+  display: block;
+  line-height: 1.2;
+}
+
+.start-button {
+  width: 200px;
+  height: 70px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: #22c55e;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.rules-button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover efektleri */
+.option-select:hover,
+.start-button:hover,
+.rules-button:hover {
+  transform: translateY(-2px);
+}
+
+.start-button:hover {
+  background: #16a34a;
+}
+
+/* Mobil görünüm */
+@media (max-width: 768px) {
+  .options-row {
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+
+  }
+
+  .option-item,
+  .start-button,
+  .rules-button {
+    width: 100%;
+  }
+
+  .game-options {
+    max-width: 300px;
+  }
+
+  .option-select {
+    height: 70px; /* Mobilde de aynı yükseklik */
+    padding: 0.75rem 0.5rem;
+  }
+
+  .option-select .option-label {
+    font-size: 0.65rem;
+  }
+
+  .option-select .option-value {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  .start-button {
+    height: 70px; /* Mobilde de aynı yükseklik */
+  }
+}
+
+/* Çok küçük ekranlar için ek düzenleme */
+@media (max-width: 360px) {
+  .option-select {
+    min-height: 70px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Açık tema için */
+.game-page.light .option-label {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 640px) {
+  .options-row {
+    flex-direction: column;
+  }
+
+  .game-options {
+    max-width: 300px;
+  }
+
+  .option-select {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-content {
+    padding: 2rem; /* 1.5rem'den 2rem'e çıkardık */
+  }
+
+  .game-header {
+    margin-bottom: 0rem;
+  }
+
+  .game-logo .game-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .game-info {
+    padding: 1.5rem;
+  }
+
+  .options-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .option-item, .start-button, .rules-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-content {
+    padding: 1.5rem; /* 1rem'den 1.5rem'e çıkardık */
+  }
+
+  .game-logo .game-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .check, .x {
+    font-size: 1.5rem;
+  }
+
+  .game-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .game-info li {
+    font-size: 0.9rem;
+  }
+
+  .start-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .rules-button {
+    padding: 0.5rem;
+    width: 50%;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .game-page {
+    padding: 0;
+  }
+
+  .game-header {
+    flex-direction: row; /* Yatayda kalmasını sağla */
+    gap: 0.5rem;
+  }
+
+  .game-header h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Mevcut stillere ek olarak */
+.welcome-message {
+  text-align: center;
+  animation: fadeInUp 0.6s ease;
+}
+
+.welcome-message h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slideUp 0.5s ease-out;
+}
+
+.welcome-message p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 0.2s;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 768px) {
+  .game-content h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-message h2 {
+    font-size: 1.8rem;
+  }
+
+  .welcome-message p {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .welcome-message h2 {
+    font-size: 1.5rem;
+  }
+
+  .welcome-message p {
+    font-size: 1rem;
+  }
+}
+
+/* Başlık animasyonları */
+.game-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titlePop 0.6s ease-out;
+}
+
+/* Oyun bilgileri için animasyonlar */
+.game-info li {
+  transform: translateX(-20px);
+  opacity: 0;
+  animation: slideRight 0.4s ease-out forwards;
+}
+
+/* Animasyon tanımlamaları */
+@keyframes titlePop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Zorluk seçici stilleri */
+.difficulty-selector {
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto;
+  position: relative;
+}
+
+.difficulty-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+.selected-difficulty {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--button-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selected-difficulty:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.difficulty-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.difficulty-popup {
+  width: 90%;
+  max-width: 400px;
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 20px;
+  padding: 1.5rem;
+  animation: popIn 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  color: white;
+}
+
+.popup-content {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.popup-item {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.popup-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.popup-item.selected {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Zorluk seviyelerine göre renkler */
+.popup-item[style*="--button-color: #22c55e"] { /* Yeşil - Hepsi ve Kolay */
+  color: #22c55e;
+}
+
+.popup-item[style*="--button-color: #3b82f6"] { /* Mavi - Normal */
+  color: #3b82f6;
+}
+
+.popup-item[style*="--button-color: #f59e0b"] { /* Turuncu - Zor */
+  color: #f59e0b;
+}
+
+.popup-item[style*="--button-color: #ef4444"] { /* Kırmızı - Çok Zor */
+  color: #ef4444;
+}
+
+/* Açık tema için */
+.game-page.light .difficulty-popup {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.game-page.light .popup-header h3 {
+  color: #1e293b;
+}
+
+.game-page.light .close-button {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.game-page.light .close-button:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.game-page.light .popup-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.game-page.light .popup-item.selected {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .selected-difficulty {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  .popup-item {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tema için arka plan rengi değişkenleri */
+.game-page.dark {
+  --bg-color: #1a2b6d;
+}
+
+.game-page.light {
+  --bg-color: #f8fafc;
+}
+
+/* Açık tema için */
+.game-page.light .difficulty-label {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.option-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  padding-left: 0.5rem;
+  justify-content: center;
+}
+
+/* Açık tema için */
+.game-page.light .option-label {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Kategori butonu için özel stil */
+.option-item:nth-child(2) .option-select {
+  color: white; /* Koyu tema için */
+}
+
+.game-page.light .option-item:nth-child(2) .option-select {
+  color: #1e293b; /* Açık tema için */
+}
+
+/* Kategori popup'ı için özel stil */
+.popup-item {
+  color: white !important; /* Tüm kategoriler beyaz */
+}
+
+.game-page.light .popup-item {
+  color: #1e293b !important; /* Açık temada koyu renk */
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .game-title {
+    gap: 0.5rem;
+  }
+
+  .game-logo .game-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .game-title h1 {
+    font-size: 1.8rem;
+  }
+} 

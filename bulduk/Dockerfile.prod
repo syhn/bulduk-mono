@@ -1,0 +1,36 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+# Cache bağımlılıkları
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+COPY package*.json ./
+
+# npm cache'i etkinleştir
+RUN npm config set cache /tmp/npm-cache --global
+
+# Tüm bağımlılıkları yükle
+RUN npm install --prefer-offline --no-audit
+
+# Copy source
+COPY . .
+
+# Build React app
+RUN GENERATE_SOURCEMAP=false npm run build
+ENV NODE_ENV=production
+
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
+COPY server.js .
+
+# Production için environment variable
+ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=256"
+EXPOSE 8080
+
+CMD ["node", "server.js"] 

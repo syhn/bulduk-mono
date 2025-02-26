@@ -1,0 +1,264 @@
+.rules-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(17, 24, 39, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(8px);
+  padding: 15vh 2rem 15vh;
+  overflow-y: auto;
+}
+
+.rules-popup {
+  margin-top: auto;
+  margin-bottom: auto;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2.5rem;
+  border-radius: 20px;
+  max-width: 550px;
+  width: 100%;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  max-height: calc(70vh - 30vh);
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.25rem;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.rules-popup h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.rules-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.how-to-play h3,
+.game-rules h3 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.how-to-play h3::before,
+.game-rules h3::before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.how-to-play h3::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322c55e'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E");
+}
+
+.game-rules h3::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'/%3E%3C/svg%3E");
+}
+
+.rules-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.rules-content li {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.6rem;
+  padding-left: 1.75rem;
+  position: relative;
+  line-height: 1.5;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.rules-content li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.rules-content li:hover {
+  transform: translateX(4px);
+  color: rgba(255, 255, 255, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Light tema için özelleştirmeler */
+.light .rules-popup {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light .rules-popup h3 {
+  color: #1e293b;
+}
+
+.light .rules-content li {
+  color: #4b5563;
+}
+
+.light .rules-content li:hover {
+  color: #1e293b;
+}
+
+.light .close-button {
+  background: rgba(0, 0, 0, 0.05);
+  color: #64748b;
+}
+
+.light .close-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .rules-popup-overlay {
+    padding: 10vh 1rem 10vh;
+  }
+
+  .rules-popup {
+    max-height: calc(80vh - 20vh);
+  }
+
+  .rules-popup h2 {
+    font-size: 1.5rem;
+  }
+
+  .how-to-play h3,
+  .game-rules h3 {
+    font-size: 1.1rem;
+  }
+
+  .rules-content li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Dark tema için */
+.dark .rules-popup {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+
+.dark .rules-popup h2,
+.dark .rules-popup h3 {
+  color: #f1f5f9;
+}
+
+.dark .rules-content li {
+  color: #cbd5e1;
+}
+
+.dark .close-button {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Scroll çubuğu stilleri */
+.rules-popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.rules-popup::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.rules-popup::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.rules-popup::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Light tema için scroll çubuğu */
+.light .rules-popup::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.light .rules-popup::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.light .rules-popup::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Sadece kurallara özel stiller */
+.rules-content {
+  /* ... */
+} 

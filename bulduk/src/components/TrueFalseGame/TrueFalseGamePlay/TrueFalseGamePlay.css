@@ -1,0 +1,17 @@
+.game-play-container {
+  min-height: 100vh;
+  padding: 1rem;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Sadece oyun sayfasına özel stiller */
+.game-stats {
+  /* ... */
+}
+
+.question-container {
+  /* ... */
+} 

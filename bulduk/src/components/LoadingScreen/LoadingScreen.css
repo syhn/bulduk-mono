@@ -1,0 +1,73 @@
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a2b6d 0%, #162454 100%);
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-letters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.loading-letter {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.loading-letter.active {
+  color: white;
+  transform: scale(1.2) translateY(-10px);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Her harf için farklı renkler */
+.loading-letter:nth-child(1) { color: #22c55e; }
+.loading-letter:nth-child(2) { color: #3b82f6; }
+.loading-letter:nth-child(3) { color: #ec4899; }
+.loading-letter:nth-child(4) { color: #f59e0b; }
+.loading-letter:nth-child(5) { color: #8b5cf6; }
+.loading-letter:nth-child(6) { color: #ef4444; }
+
+.loading-letter.active {
+  color: white !important;
+}
+
+.loading-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  margin-top: 1rem;
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .loading-letters {
+    font-size: 2rem;
+    gap: 0.3rem;
+  }
+  
+  .loading-text {
+    font-size: 0.9rem;
+  }
+} 

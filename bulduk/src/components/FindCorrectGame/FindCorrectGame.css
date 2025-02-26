@@ -1,0 +1,148 @@
+/* Ana tema renkleri için değişkenler */
+:root {
+  --primary-green: #22c55e;
+  --primary-green-hover: #83a08e;
+}
+
+.find-correct-game .check-square {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.find-correct-game .check {
+  font-size: 3rem;
+  color: white;
+}
+
+.find-correct-game .game-info li:before {
+  color: #3b82f6;
+}
+
+.find-correct-game .start-button {
+  background: #3b82f6;
+}
+
+.find-correct-game .start-button:hover {
+  background: #2563eb;
+}
+
+/* Diğer stiller TrueFalseGame.css ile aynı olduğu için tekrar yazmaya gerek yok */
+
+@media (max-width: 768px) {
+  .find-correct-game .check-square {
+    width: 80px;
+    height: 80px;
+  }
+
+  .find-correct-game .check {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .find-correct-game .check-square {
+    width: 60px;
+    height: 60px;
+  }
+
+  .find-correct-game .check {
+    font-size: 2rem;
+  }
+}
+
+/* Mevcut stillerin üzerine ekleyin/güncelleyin */
+
+.find-correct-game.light h1,
+.find-correct-game.light h2 {
+  color: #1a2b6d;
+}
+
+.find-correct-game.light .game-info li {
+  color: #4a5568;
+}
+
+.find-correct-game.light .check-square {
+  background: rgba(59, 130, 246, 0.9);
+}
+
+/* Koyu tema */
+.find-correct-game.dark .check-square {
+  background: var(--primary-green);
+}
+
+.find-correct-game.dark .game-info li:before {
+  color: var(--primary-green);
+}
+
+.find-correct-game.dark .start-button {
+  background: var(--primary-green);
+}
+
+.find-correct-game.dark .start-button:hover {
+  background: var(--primary-green-hover);
+}
+
+/* Açık tema */
+.game-page.light {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.game-page.light .game-content {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon rengini yeşil yapalım */
+.game-page.light .game-icon {
+  color: var(--primary-green);
+}
+
+/* Yeni game-icon stilleri */
+.game-logo .game-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+  .game-logo .game-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-logo .game-icon {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.game-page {
+  min-height: 100vh;
+  padding: 0; /* padding-top'ı kaldırdık */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 480px) {
+  .game-page {
+    padding: 0;
+  }
+}
+
+/* Diğer stiller aynı kalacak */ 

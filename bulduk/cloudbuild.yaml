@@ -1,0 +1,75 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+
+      - name: Build and Push Docker image
+        env:
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            DOCKERFILE="Dockerfile.prod"
+          else
+            DOCKERFILE="Dockerfile.dev"
+          fi
+
+          if [ -z "$GCP_PROJECT" ]; then
+            docker build -t bulduk -f $DOCKERFILE .
+          else
+            docker build -t gcr.io/$GCP_PROJECT/bulduk -f $DOCKERFILE .
+            docker push gcr.io/$GCP_PROJECT/bulduk
+          fi
+
+      - name: Deploy to Cloud Run
+        if: secrets.GCP_PROJECT_ID != ''
+        run: |
+          gcloud run deploy bulduk \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/bulduk \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --project ${{ secrets.GCP_PROJECT_ID }} \
+            --quiet \
+            --no-cpu-throttling \
+            --execution-environment=gen2 \
+            --cpu=1 \
+            --memory=512Mi \
+            --min-instances=0 \
+            --max-instances=10 \
+            --set-env-vars=NODE_ENV=production 

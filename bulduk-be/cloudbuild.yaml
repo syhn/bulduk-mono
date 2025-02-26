@@ -1,0 +1,30 @@
+steps:
+  # Docker image'ı oluştur
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/bulduk-be', '.']
+  
+  # Image'ı Container Registry'ye gönder
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/bulduk-be']
+  
+  # Cloud Run'a deploy et
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'bulduk-be'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/bulduk-be'
+      - '--region'
+      - 'europe-west1'  # veya tercih ettiğiniz bölge
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'  # Herkese açık API için
+      - '--port'
+      - '8000'  # Port ayarı
+      - '--set-env-vars'
+      - 'PORT=8000'  # Environment variable
+
+images:
+  - 'gcr.io/$PROJECT_ID/bulduk-be' 
